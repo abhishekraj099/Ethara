@@ -59,17 +59,23 @@ router.get('/my', protect, async (req, res) => {
 
 router.get('/dashboard', protect, async (req, res) => {
   try {
-    const myTasks = await Task.find({ assignedTo: req.user._id }).populate('project', 'name');
+    let tasks;
+    if (req.user.role === 'admin') {
+      // Admin sees ALL tasks system-wide
+      tasks = await Task.find({}).populate('project', 'name').populate('assignedTo', 'name');
+    } else {
+      // Members see only their assigned tasks
+      tasks = await Task.find({ assignedTo: req.user._id }).populate('project', 'name');
+    }
 
-    const total = myTasks.length;
-    const done = myTasks.filter(t => t.status === 'done').length;
-    const inProgress = myTasks.filter(t => t.status === 'in-progress').length;
-    const todo = myTasks.filter(t => t.status === 'todo').length;
-    const overdue = myTasks.filter(t => t.isOverdue).length;
+    const total = tasks.length;
+    const done = tasks.filter(t => t.status === 'done').length;
+    const inProgress = tasks.filter(t => t.status === 'in-progress').length;
+    const todo = tasks.filter(t => t.status === 'todo').length;
+    const overdue = tasks.filter(t => t.isOverdue).length;
+    const recentTasks = tasks.slice(0, 6);
 
-    const recentTasks = myTasks.slice(0, 5);
-
-    res.json({ total, done, inProgress, todo, overdue, recentTasks });
+    res.json({ total, done, inProgress, todo, overdue, recentTasks, isAdmin: req.user.role === 'admin' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -131,18 +137,22 @@ router.put('/:id', protect, async (req, res) => {
     );
     const isOwner = access.project.owner.toString() === req.user._id.toString();
     const isProjectAdmin = memberEntry && memberEntry.role === 'admin';
+    const isTaskCreator = task.createdBy.toString() === req.user._id.toString();
+    const isSystemAdmin = req.user.role === 'admin';
 
     const { title, description, assignedTo, priority, dueDate, tags, status } = req.body;
 
-    if (!isOwner && !isProjectAdmin && req.user.role !== 'admin') {
-      task.status = status || task.status;
-    } else {
+    // Only project admin, task creator, or system admin can edit full details
+    if (isProjectAdmin || isOwner || isSystemAdmin || isTaskCreator) {
       task.title = title || task.title;
       task.description = description !== undefined ? description : task.description;
       task.assignedTo = assignedTo !== undefined ? assignedTo : task.assignedTo;
       task.priority = priority || task.priority;
       task.dueDate = dueDate !== undefined ? dueDate : task.dueDate;
       task.tags = tags || task.tags;
+      task.status = status || task.status;
+    } else {
+      // Regular members can only update status
       task.status = status || task.status;
     }
 

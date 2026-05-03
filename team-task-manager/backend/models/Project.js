@@ -26,12 +26,50 @@ const projectSchema = new mongoose.Schema({
       type: String,
       enum: ['admin', 'member'],
       default: 'member'
+    },
+    joinedAt: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  pendingMembers: [{
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'approved', 'rejected'],
+      default: 'pending'
+    },
+    requestedAt: {
+      type: Date,
+      default: Date.now
+    },
+    approvedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    approvedAt: {
+      type: Date
     }
   }],
   status: {
     type: String,
-    enum: ['active', 'completed', 'archived'],
+    // 'pending' = submitted by member, awaiting admin approval
+    enum: ['pending', 'active', 'completed', 'archived'],
     default: 'active'
+  },
+  approvedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  approvedAt: {
+    type: Date
+  },
+  rejectedReason: {
+    type: String,
+    default: ''
   },
   deadline: {
     type: Date

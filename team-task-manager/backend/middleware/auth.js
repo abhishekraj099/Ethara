@@ -58,4 +58,33 @@ const projectAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = { protect, adminOnly, projectAdmin };
+const memberRole = (role) => {
+  return async (req, res, next) => {
+    if (req.user.role === 'admin') {
+      return next();
+    }
+    
+    const Project = require('../models/Project');
+    const projectId = req.params.projectId || req.body.project;
+    
+    if (!projectId) {
+      return res.status(400).json({ message: 'Project ID required' });
+    }
+
+    const project = await Project.findById(projectId);
+    if (!project) return res.status(404).json({ message: 'Project not found' });
+
+    const memberEntry = project.members.find(
+      m => m.user.toString() === req.user._id.toString()
+    );
+    const isOwner = project.owner.toString() === req.user._id.toString();
+
+    if (isOwner || (memberEntry && memberEntry.role === role) || (memberEntry && memberEntry.role === 'admin')) {
+      next();
+    } else {
+      res.status(403).json({ message: `Access denied: ${role} role required in project` });
+    }
+  };
+};
+
+module.exports = { protect, adminOnly, projectAdmin, memberRole };

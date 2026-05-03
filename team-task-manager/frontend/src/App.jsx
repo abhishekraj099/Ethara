@@ -2,8 +2,10 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
-import Login from './pages/Login';
-import Signup from './pages/Signup';
+import Welcome from './pages/Welcome';
+import UserLogin from './pages/UserLogin';
+import UserSignup from './pages/UserSignup';
+import AdminLogin from './pages/AdminLogin';
 import Dashboard from './pages/Dashboard';
 import Projects from './pages/Projects';
 import ProjectDetail from './pages/ProjectDetail';
@@ -13,7 +15,7 @@ import Layout from './components/Layout';
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useAuth();
   if (loading) return <div style={{ padding: 40 }}>Loading...</div>;
-  return user ? children : <Navigate to="/login" />;
+  return user ? children : <Navigate to="/" />;
 };
 
 const PublicRoute = ({ children }) => {
@@ -27,9 +29,10 @@ export default function App() {
       <BrowserRouter>
         <Toaster position="top-right" />
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" />} />
-          <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
-          <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
+          <Route path="/" element={<PublicRoute><Welcome /></PublicRoute>} />
+          <Route path="/user-login" element={<PublicRoute><UserLogin /></PublicRoute>} />
+          <Route path="/user-signup" element={<PublicRoute><UserSignup /></PublicRoute>} />
+          <Route path="/admin-login" element={<PublicRoute><AdminLogin /></PublicRoute>} />
           <Route path="/" element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="projects" element={<Projects />} />

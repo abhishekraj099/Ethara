@@ -1,16 +1,81 @@
-# React + Vite
+# Team Task Manager Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the React user interface for the Team Task Manager application. It is built with Vite, React Router, Axios, and React Hot Toast.
 
-Currently, two official plugins are available:
+## Project Links
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- GitHub repository: https://github.com/abhishekraj099/Ethara
+- Backend API: https://ethara-production-6802.up.railway.app/
+- Frontend deployment: https://ethara-six.vercel.app
 
-## React Compiler
+## Overview
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The frontend provides the following workflows:
 
-## Expanding the ESLint configuration
+- Authentication with login and signup screens
+- Project management and project detail views
+- Task listing and task management screens
+- Shared layout and authenticated navigation
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+- React 19
+- Vite
+- React Router DOM
+- Axios
+- Lucide React
+- React Hot Toast
+
+## Local Setup
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Create a `.env` file in the frontend directory:
+
+```bash
+VITE_API_URL=https://your-backend-domain.com
+```
+
+For local development, you can use:
+
+```bash
+VITE_API_URL=http://localhost:5000
+```
+
+3. Start the development server:
+
+```bash
+npm run dev
+```
+
+## Available Scripts
+
+- `npm run dev` - start the Vite development server
+- `npm run build` - create a production build
+- `npm run lint` - run ESLint
+- `npm run preview` - preview the production build locally
+
+## API Configuration
+
+All API requests go through the shared Axios client in `src/api/index.js`. The base URL is normalized so both local and hosted environments work with the same code path.
+
+## Deployment Notes
+
+If you deploy this frontend to Vercel, configure the environment variable `VITE_API_URL` and add SPA rewrite support so React Router routes continue to work on refresh.
+
+Recommended production values:
+
+- `VITE_API_URL=https://ethara-production-6802.up.railway.app/`
+- Frontend URL: https://ethara-six.vercel.app
+
+## Project Structure
+
+- `src/api` - shared API client
+- `src/context` - authentication state
+- `src/components` - reusable UI components
+- `src/pages` - application pages
+- `src/assets` - static assets

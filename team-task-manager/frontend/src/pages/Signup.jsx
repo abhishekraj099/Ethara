@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 
 export default function Signup() {
-  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'member' });
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -14,8 +14,8 @@ export default function Signup() {
     e.preventDefault();
     setLoading(true);
     try {
-      await signup(form.name, form.email, form.password, form.role);
-      toast.success('Account created!');
+      await signup(form.name, form.email, form.password);
+      toast.success('Account created! You are logged in.');
       navigate('/dashboard');
     } catch (err) {
       toast.error(err.response?.data?.message || err.response?.data?.errors?.[0]?.msg || 'Signup failed');
@@ -38,7 +38,7 @@ export default function Signup() {
         <form onSubmit={handleSubmit}>
           {['name', 'email', 'password'].map((field) => (
             <div key={field} className="field-group">
-              <label>{field}</label>
+              <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
               <input
                 type={field === 'password' ? 'password' : field === 'email' ? 'email' : 'text'}
                 value={form[field]}
@@ -48,14 +48,6 @@ export default function Signup() {
               />
             </div>
           ))}
-
-          <div className="field-group">
-            <label>Role</label>
-            <select value={form.role} onChange={(e) => setForm({ ...form, role: e.target.value })} className="select">
-              <option value="member">Member</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
 
           <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', marginTop: 8 }}>
             {loading ? 'Creating...' : 'Create Account'}
