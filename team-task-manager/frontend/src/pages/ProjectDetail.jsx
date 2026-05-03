@@ -31,9 +31,13 @@ export default function ProjectDetail() {
     authAPI.getUsers().then((r) => setUsers(r.data));
   }, [id]);
 
-  const isAdmin = project?.owner?._id === user?._id ||
-    project?.members?.find((m) => m.user?._id === user?._id)?.role === 'admin' ||
-    user?.role === 'admin';
+  // ── Permission levels ──
+  const isSystemAdmin = user?.role === 'admin';
+  const memberEntry = project?.members?.find((m) => m.user?._id === user?._id);
+  const isProjectAdmin = memberEntry?.role === 'admin';
+  const isOwner = project?.owner?._id === user?._id;
+  const isAdmin = isSystemAdmin || isProjectAdmin || isOwner; // can manage tasks
+  const canManageMembers = isSystemAdmin; // ONLY system admin can add/assign members
 
   const handleCreateTask = async (e) => {
     e.preventDefault();
