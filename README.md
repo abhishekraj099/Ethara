@@ -5,7 +5,7 @@ Team Task Manager is a full-stack project for managing users, projects, and task
 ## Project Links
 
 - GitHub repository: https://github.com/abhishekraj099/Ethara
-- Backend deployment: https://ethara-production-6802.up.railway.app
+- Backend deployment: https://ethara-production-6802.up.railway.app/
 - Frontend deployment: https://ethara-six.vercel.app
 
 ## Repository Structure
@@ -62,7 +62,7 @@ npm run dev
 - Connect the GitHub repository to Railway
 - Set `MONGO_URI`, `JWT_SECRET`, `NODE_ENV=production`, and `FRONTEND_URL`
 - Railway will use `PORT` automatically
-- Backend URL: https://ethara-production-6802.up.railway.app
+- Backend URL: https://ethara-production-6802.up.railway.app/
 
 ### Frontend on Vercel
 

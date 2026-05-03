@@ -5,7 +5,7 @@ This is the Express and MongoDB API for the Team Task Manager application.
 ## Project Links
 
 - GitHub repository: https://github.com/abhishekraj099/Ethara
-- Backend deployment: https://ethara-production-6802.up.railway.app
+- Backend deployment: https://ethara-production-6802.up.railway.app/
 - Frontend deployment: https://ethara-six.vercel.app
 
 ## Overview
@@ -77,7 +77,7 @@ This backend is Railway-friendly because it uses `process.env.PORT` and exposes 
 
 Production services:
 
-- API: https://ethara-production-6802.up.railway.app
+- API: https://ethara-production-6802.up.railway.app/
 - Web app: https://ethara-six.vercel.app
 
 ## Project Structure

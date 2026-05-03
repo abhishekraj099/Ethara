@@ -5,7 +5,7 @@ This is the React user interface for the Team Task Manager application. It is bu
 ## Project Links
 
 - GitHub repository: https://github.com/abhishekraj099/Ethara
-- Backend API: https://ethara-production-6802.up.railway.app
+- Backend API: https://ethara-production-6802.up.railway.app/
 - Frontend deployment: https://ethara-six.vercel.app
 
 ## Overview
@@ -69,7 +69,7 @@ If you deploy this frontend to Vercel, configure the environment variable `VITE_
 
 Recommended production values:
 
-- `VITE_API_URL=https://ethara-production-6802.up.railway.app`
+- `VITE_API_URL=https://ethara-production-6802.up.railway.app/`
 - Frontend URL: https://ethara-six.vercel.app
 
 ## Project Structure
