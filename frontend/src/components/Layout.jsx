@@ -62,26 +62,7 @@ export default function Layout() {
           ))}
         </nav>
 
-        {/* Capabilities summary */}
-        <div style={{ padding: '12px', margin: '8px 0', borderRadius: 8, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.06)', fontSize: 11, color: 'rgba(187,247,208,0.6)', lineHeight: 1.7 }}>
-          {isAdmin ? (
-            <>
-              <div style={{ fontWeight: 700, color: 'rgba(187,247,208,0.9)', marginBottom: 4 }}>👑 Admin Powers</div>
-              <div>✓ Approve member projects</div>
-              <div>✓ Assign tasks to members</div>
-              <div>✓ View all data globally</div>
-              <div>✓ Manage all users</div>
-            </>
-          ) : (
-            <>
-              <div style={{ fontWeight: 700, color: 'rgba(187,247,208,0.9)', marginBottom: 4 }}>👤 Your Access</div>
-              <div>✓ Submit project for approval</div>
-              <div>✓ View assigned projects</div>
-              <div>✓ Update task status</div>
-              <div>✓ Manage your tasks</div>
-            </>
-          )}
-        </div>
+
 
         {/* User Footer */}
         <div className="sidebar-footer">

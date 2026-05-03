@@ -95,7 +95,7 @@ export default function Projects() {
         </div>
         <button onClick={() => setShowForm(!showForm)} className="btn btn-primary">
           <Plus size={16} />
-          {isAdmin ? 'New Project' : 'Submit Project'}
+          {isAdmin ? 'New Project' : 'Create Project'}
         </button>
       </div>
 
@@ -103,7 +103,7 @@ export default function Projects() {
       {showForm && (
         <div className="glass-card" style={{ marginBottom: 20, borderLeft: '3px solid var(--primary)' }}>
           <div className="section-title">
-            <h2>{isAdmin ? 'Create New Project' : 'Submit Project for Approval'}</h2>
+            <h2>{isAdmin ? 'Create New Project' : 'Create New Project'}</h2>
           </div>
           {!isAdmin && (
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', background: 'var(--warning-soft)', border: '1px solid #fde68a', borderRadius: 8, padding: '10px 14px', marginBottom: 14, fontSize: 13, color: '#92400e' }}>
