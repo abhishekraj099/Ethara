@@ -174,7 +174,7 @@ export default function Tasks() {
                 </div>
 
                 {/* Member: status stepper (visual progress update) */}
-                {!isAdmin && (
+                {!isAdmin && task.assignedTo?._id === user?._id && (
                   <div style={{ marginTop: 10 }}>
                     <StatusStepper value={task.status} onChange={(s) => handleStatusChange(task._id, s)} />
                   </div>

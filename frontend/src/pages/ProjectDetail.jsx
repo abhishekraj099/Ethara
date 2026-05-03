@@ -31,9 +31,16 @@ export default function ProjectDetail() {
     authAPI.getUsers().then((r) => setUsers(r.data));
   }, [id]);
 
-  const isAdmin = project?.owner?._id === user?._id ||
-    project?.members?.find((m) => m.user?._id === user?._id)?.role === 'admin' ||
-    user?.role === 'admin';
+  // ── Permission levels ──
+  // System admin: full control everywhere
+  const isSystemAdmin = user?.role === 'admin';
+  // Project-level admin (owner or member with admin role)
+  const memberEntry = project?.members?.find((m) => m.user?._id === user?._id);
+  const isProjectAdmin = memberEntry?.role === 'admin';
+  const isOwner = project?.owner?._id === user?._id;
+  // Aliases for readability
+  const isAdmin = isSystemAdmin || isProjectAdmin || isOwner;   // can manage tasks
+  const canManageMembers = isSystemAdmin;                        // ONLY system admin can add/assign members
 
   const handleCreateTask = async (e) => {
     e.preventDefault();
@@ -152,7 +159,7 @@ export default function ProjectDetail() {
           <h1 className="page-title">{project.name}</h1>
           <p className="page-subtitle">{project.description || 'No description added.'}</p>
         </div>
-        {isAdmin && (
+        {isSystemAdmin && (
           <button onClick={() => setShowTaskForm(!showTaskForm)} className="btn btn-primary">
             <Plus size={16} /> Add Task
           </button>
@@ -163,7 +170,7 @@ export default function ProjectDetail() {
       <div className="glass-card" style={{ marginBottom: 16 }}>
         <div className="section-title">
           <h2>Team Members <span style={{ color: 'var(--text-muted)', fontWeight: 400, fontSize: 14 }}>({project.members?.length || 0})</span></h2>
-          {isAdmin && (
+          {canManageMembers && (
             <div style={{ display: 'flex', gap: 8 }}>
               <button onClick={() => { setShowMemberForm(!showMemberForm); setShowAssignForm(false); }} className="btn btn-secondary" style={{ fontSize: 12 }}>
                 <UserPlus size={14} /> Add Member
@@ -221,7 +228,7 @@ export default function ProjectDetail() {
                 <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>{member.user?.name}</div>
                 <div style={{ fontSize: 11, color: 'var(--text-muted)', textTransform: 'capitalize' }}>{member.role}</div>
               </div>
-              {isAdmin && (
+              {canManageMembers && (
                 <button onClick={() => handleRemoveMember(member.user?._id)} className="btn btn-danger icon-btn" title="Remove member" style={{ width: 26, height: 26, marginLeft: 4 }}>
                   <X size={13} />
                 </button>
@@ -235,7 +242,7 @@ export default function ProjectDetail() {
       </div>
 
       {/* ── Pending Approvals ── */}
-      {isAdmin && pendingCount > 0 && (
+      {canManageMembers && pendingCount > 0 && (
         <div className="glass-card" style={{ marginBottom: 16, borderLeft: '3px solid var(--warning)' }}>
           <div className="section-title">
             <h2>Pending Approvals <span style={{ color: 'var(--warning)', fontWeight: 400, fontSize: 14 }}>({pendingCount})</span></h2>
@@ -321,7 +328,7 @@ export default function ProjectDetail() {
               )}
 
               {columnTasks.map((task) => {
-                const canEditTask = isAdmin || task.createdBy?._id === user?._id;
+                const canEditTask = isSystemAdmin || task.assignedTo?._id === user?._id;
                 return (
                   <div key={task._id} className="task-card" style={{ borderLeft: `3px solid ${priorityColor[task.priority]}` }}>
                     <h4>{task.title}</h4>

@@ -152,7 +152,7 @@ export default function ProjectDetail() {
           <h1 className="page-title">{project.name}</h1>
           <p className="page-subtitle">{project.description || 'No description added.'}</p>
         </div>
-        {isAdmin && (
+        {isSystemAdmin && (
           <button onClick={() => setShowTaskForm(!showTaskForm)} className="btn btn-primary">
             <Plus size={16} /> Add Task
           </button>
@@ -321,7 +321,7 @@ export default function ProjectDetail() {
               )}
 
               {columnTasks.map((task) => {
-                const canEditTask = isAdmin || task.createdBy?._id === user?._id;
+                const canEditTask = isSystemAdmin || task.assignedTo?._id === user?._id;
                 return (
                   <div key={task._id} className="task-card" style={{ borderLeft: `3px solid ${priorityColor[task.priority]}` }}>
                     <h4>{task.title}</h4>
