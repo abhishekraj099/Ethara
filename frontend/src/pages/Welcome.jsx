@@ -9,7 +9,7 @@ export default function Welcome() {
         <div className="welcome-header">
           <div className="brand-mark"><PanelsTopLeft size={32} /></div>
           <h1>Team Task Manager</h1>
-          <p>Manage projects, assign tasks, and track progress</p>
+          <p>Plan with clarity, assign with purpose, and track every step — because great teams don't just work together, they deliver together.</p>
         </div>
 
         <div className="welcome-divider">Choose Your Role</div>
@@ -19,8 +19,8 @@ export default function Welcome() {
             <div className="login-icon">
               <User size={40} />
             </div>
-            <h2>User Login</h2>
-            <p>View projects, apply to join teams, and collaborate</p>
+            <h2>Member Login</h2>
+            <p>Collaborate with purpose—stay aligned, track progress, and drive results together</p>
             <div className="login-btn">Sign In / Sign Up</div>
           </Link>
 
@@ -29,7 +29,7 @@ export default function Welcome() {
               <Lock size={40} />
             </div>
             <h2>Admin Login</h2>
-            <p>Create projects, manage teams, and oversee delivery</p>
+            <p>Lead with clarity—organize teams, delegate tasks, and oversee delivery with confidence</p>
             <div className="login-btn">Admin Portal</div>
           </Link>
         </div>

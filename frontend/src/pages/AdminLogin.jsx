@@ -36,7 +36,7 @@ export default function AdminLogin() {
           <div className="brand-mark"><PanelsTopLeft size={22} /></div>
           <div>
             <h1 className="auth-title">Admin Portal</h1>
-            <p className="auth-subtitle">Secure admin access with credentials</p>
+            <p className="auth-subtitle">Lead with clarity—organize teams, delegate tasks, and oversee delivery with confidence</p>
           </div>
         </div>
 

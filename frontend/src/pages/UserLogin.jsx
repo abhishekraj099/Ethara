@@ -31,8 +31,8 @@ export default function UserLogin() {
         <div className="auth-brand">
           <div className="brand-mark"><PanelsTopLeft size={22} /></div>
           <div>
-            <h1 className="auth-title">User Login</h1>
-            <p className="auth-subtitle">Sign in to view projects and collaborate</p>
+            <h1 className="auth-title">Member Login</h1>
+            <p className="auth-subtitle">Collaborate with purpose—stay aligned, track progress, and drive results</p>
           </div>
         </div>
 
