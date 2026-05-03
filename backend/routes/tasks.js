@@ -59,17 +59,23 @@ router.get('/my', protect, async (req, res) => {
 
 router.get('/dashboard', protect, async (req, res) => {
   try {
-    const myTasks = await Task.find({ assignedTo: req.user._id }).populate('project', 'name');
+    let tasks;
+    if (req.user.role === 'admin') {
+      // Admin sees ALL tasks system-wide
+      tasks = await Task.find({}).populate('project', 'name').populate('assignedTo', 'name');
+    } else {
+      // Members see only their assigned tasks
+      tasks = await Task.find({ assignedTo: req.user._id }).populate('project', 'name');
+    }
 
-    const total = myTasks.length;
-    const done = myTasks.filter(t => t.status === 'done').length;
-    const inProgress = myTasks.filter(t => t.status === 'in-progress').length;
-    const todo = myTasks.filter(t => t.status === 'todo').length;
-    const overdue = myTasks.filter(t => t.isOverdue).length;
+    const total = tasks.length;
+    const done = tasks.filter(t => t.status === 'done').length;
+    const inProgress = tasks.filter(t => t.status === 'in-progress').length;
+    const todo = tasks.filter(t => t.status === 'todo').length;
+    const overdue = tasks.filter(t => t.isOverdue).length;
+    const recentTasks = tasks.slice(0, 6);
 
-    const recentTasks = myTasks.slice(0, 5);
-
-    res.json({ total, done, inProgress, todo, overdue, recentTasks });
+    res.json({ total, done, inProgress, todo, overdue, recentTasks, isAdmin: req.user.role === 'admin' });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { PanelsTopLeft } from 'lucide-react';
+import { Zap, UserPlus } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import './AuthPages.css';
@@ -27,46 +27,76 @@ export default function UserSignup() {
 
   return (
     <div className="auth-page">
-      <div className="auth-card">
-        <div className="auth-tabs">
-          <Link to="/user-login" className="auth-tab">Login</Link>
-          <Link to="/user-signup" className="auth-tab active">Signup</Link>
-        </div>
-
-        <div className="auth-brand">
-          <div className="brand-mark"><PanelsTopLeft size={22} /></div>
+      {/* Left — Hero */}
+      <div className="auth-hero">
+        <div className="auth-hero-brand">
+          <div className="auth-hero-brand-mark"><Zap size={20} /></div>
           <div>
-            <h1 className="auth-title">Join the Team</h1>
-            <p className="auth-subtitle">Collaborate with purpose—stay aligned, track progress, and drive results together</p>
+            <div className="auth-hero-brand-name">Team Task Manager</div>
+            <div className="auth-hero-brand-sub">Collaborative workspace</div>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          {['name', 'email', 'password'].map((field) => (
-            <div key={field} className="field-group">
-              <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
-              <input
-                type={field === 'password' ? 'password' : field === 'email' ? 'email' : 'text'}
-                value={form[field]}
-                onChange={(e) => setForm({ ...form, [field]: e.target.value })}
-                required
-                className="field"
-                placeholder={field === 'name' ? 'Your full name' : field === 'email' ? 'you@example.com' : 'Create a password'}
-              />
+        <div className="auth-hero-content">
+          <div className="auth-hero-quote">
+            Your journey to <span>better teamwork</span> starts with a <span>single step.</span>
+          </div>
+          <p className="auth-hero-desc">
+            Join your team today. Collaborate on projects, get tasks assigned to you, and track your delivery in real time.
+          </p>
+        </div>
+
+        <div className="auth-hero-stats">
+          <div>
+            <div className="auth-hero-stat-value">Free</div>
+            <div className="auth-hero-stat-label">To join</div>
+          </div>
+          <div>
+            <div className="auth-hero-stat-value">Instant</div>
+            <div className="auth-hero-stat-label">Access</div>
+          </div>
+          <div>
+            <div className="auth-hero-stat-value">Team</div>
+            <div className="auth-hero-stat-label">Collaboration</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right — Form */}
+      <div className="auth-form-panel">
+        <div className="auth-card">
+          <div className="auth-tabs">
+            <Link to="/user-login" className="auth-tab">Login</Link>
+            <Link to="/user-signup" className="auth-tab active">Signup</Link>
+          </div>
+
+          <div className="auth-brand">
+            <div className="brand-mark"><UserPlus size={20} /></div>
+            <div>
+              <h1 className="auth-title">Create Account</h1>
+              <p className="auth-subtitle">Join your team and start collaborating today</p>
             </div>
-          ))}
+          </div>
 
-          <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', marginTop: 8 }}>
-            {loading ? 'Creating...' : 'Create Account'}
-          </button>
-        </form>
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
+            {[
+              { key: 'name', label: 'Full Name', type: 'text', placeholder: 'Your full name' },
+              { key: 'email', label: 'Email', type: 'email', placeholder: 'you@example.com' },
+              { key: 'password', label: 'Password', type: 'password', placeholder: 'Create a strong password' },
+            ].map(({ key, label, type, placeholder }) => (
+              <div key={key} className="field-group">
+                <label>{label}</label>
+                <input type={type} value={form[key]} onChange={(e) => setForm({ ...form, [key]: e.target.value })} required className="field" placeholder={placeholder} />
+              </div>
+            ))}
+            <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', marginTop: 8, minHeight: 42 }}>
+              {loading ? 'Creating account...' : 'Create Account'}
+            </button>
+          </form>
 
-        <p className="auth-link">
-          Already have an account? <Link to="/user-login">Sign in</Link>
-        </p>
-        <p className="auth-link">
-          Admin? <Link to="/admin-login">Admin portal</Link>
-        </p>
+          <p className="auth-link">Already have an account? <Link to="/user-login">Sign in</Link></p>
+          <p className="auth-link">Admin? <Link to="/admin-login">Admin portal</Link></p>
+        </div>
       </div>
     </div>
   );

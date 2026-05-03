@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { PanelsTopLeft, User, Lock } from 'lucide-react';
+import { Zap, Users, ShieldCheck } from 'lucide-react';
 import './Welcome.css';
 
 export default function Welcome() {
@@ -7,7 +7,18 @@ export default function Welcome() {
     <div className="welcome-page">
       <div className="welcome-container">
         <div className="welcome-header">
-          <div className="brand-mark"><PanelsTopLeft size={32} /></div>
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 16 }}>
+            <div style={{
+              width: 56, height: 56,
+              background: 'var(--primary)',
+              borderRadius: 16,
+              display: 'grid', placeItems: 'center',
+              color: '#fff',
+              boxShadow: '0 0 32px var(--primary-glow)',
+            }}>
+              <Zap size={28} />
+            </div>
+          </div>
           <h1>Team Task Manager</h1>
           <p>Plan with clarity, assign with purpose, and track every step — because great teams don't just work together, they deliver together.</p>
         </div>
@@ -17,19 +28,19 @@ export default function Welcome() {
         <div className="login-options">
           <Link to="/user-login" className="login-card user-login">
             <div className="login-icon">
-              <User size={40} />
+              <Users size={32} />
             </div>
             <h2>Member Login</h2>
-            <p>Collaborate with purpose—stay aligned, track progress, and drive results together</p>
+            <p>Collaborate with purpose — stay aligned, track progress, and drive results together</p>
             <div className="login-btn">Sign In / Sign Up</div>
           </Link>
 
           <Link to="/admin-login" className="login-card admin-login">
             <div className="login-icon">
-              <Lock size={40} />
+              <ShieldCheck size={32} />
             </div>
             <h2>Admin Login</h2>
-            <p>Lead with clarity—organize teams, delegate tasks, and oversee delivery with confidence</p>
+            <p>Lead with clarity — organize teams, delegate tasks, and oversee delivery with confidence</p>
             <div className="login-btn">Admin Portal</div>
           </Link>
         </div>

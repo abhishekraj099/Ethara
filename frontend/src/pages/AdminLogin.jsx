@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { PanelsTopLeft, Lock, AlertCircle } from 'lucide-react';
+import { Zap, ShieldCheck, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import './AuthPages.css';
@@ -31,61 +31,85 @@ export default function AdminLogin() {
 
   return (
     <div className="auth-page">
-      <div className="auth-card">
-        <div className="auth-brand">
-          <div className="brand-mark"><PanelsTopLeft size={22} /></div>
+      {/* Left — Hero */}
+      <div className="auth-hero">
+        <div className="auth-hero-brand">
+          <div className="auth-hero-brand-mark"><Zap size={20} /></div>
           <div>
-            <h1 className="auth-title">Admin Portal</h1>
-            <p className="auth-subtitle">Lead with clarity—organize teams, delegate tasks, and oversee delivery with confidence</p>
+            <div className="auth-hero-brand-name">Team Task Manager</div>
+            <div className="auth-hero-brand-sub">Admin workspace</div>
           </div>
         </div>
 
-        {error && (
-          <div className="error-banner">
-            <AlertCircle size={18} />
-            <div>{error}</div>
+        <div className="auth-hero-content">
+          <div className="auth-hero-quote">
+            Lead with <span>clarity.</span> Deliver with <span>confidence.</span>
           </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <div className="field-group">
-            <label>Admin ID</label>
-            <input
-              type="text"
-              value={form.adminId}
-              onChange={(e) => setForm({ ...form, adminId: e.target.value })}
-              required
-              className="field"
-              placeholder="e.g., NBXADMIN01"
-            />
-          </div>
-
-          <div className="field-group">
-            <label>Password</label>
-            <input
-              type="password"
-              value={form.password}
-              onChange={(e) => setForm({ ...form, password: e.target.value })}
-              required
-              className="field"
-              placeholder="Enter admin password"
-            />
-          </div>
-
-          <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', marginTop: 8 }}>
-            {loading ? 'Signing in...' : 'Admin Sign In'}
-          </button>
-        </form>
-
-        <div className="demo-credentials">
-          <strong>Demo Credentials:</strong><br/>
-          Admin ID: NBXADMIN01<br/>
-          Password: admin@123
+          <p className="auth-hero-desc">
+            Organize teams, create projects, assign tasks, and oversee every delivery from your centralized admin dashboard.
+          </p>
         </div>
 
-        <p className="auth-link">
-          Not an admin? <Link to="/user-login">User login</Link>
-        </p>
+        <div className="auth-hero-stats">
+          <div>
+            <div className="auth-hero-stat-value">Full</div>
+            <div className="auth-hero-stat-label">Control</div>
+          </div>
+          <div>
+            <div className="auth-hero-stat-value">Team</div>
+            <div className="auth-hero-stat-label">Management</div>
+          </div>
+          <div>
+            <div className="auth-hero-stat-value">Role-based</div>
+            <div className="auth-hero-stat-label">Permissions</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Right — Form */}
+      <div className="auth-form-panel">
+        <div className="auth-card">
+          <div className="auth-brand">
+            <div className="brand-mark" style={{ background: 'var(--accent)' }}>
+              <ShieldCheck size={20} />
+            </div>
+            <div>
+              <h1 className="auth-title">Admin Portal</h1>
+              <p className="auth-subtitle">Sign in with your admin credentials to manage the workspace</p>
+            </div>
+          </div>
+
+          {error && (
+            <div className="error-banner">
+              <AlertCircle size={16} style={{ flexShrink: 0, marginTop: 1 }} />
+              <div>{error}</div>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="field-group">
+              <label>Admin ID</label>
+              <input type="text" value={form.adminId} onChange={(e) => setForm({ ...form, adminId: e.target.value })} required className="field" placeholder="e.g., NBXADMIN01" />
+            </div>
+            <div className="field-group">
+              <label>Password</label>
+              <input type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required className="field" placeholder="Enter admin password" />
+            </div>
+            <button type="submit" disabled={loading} className="btn btn-primary" style={{ width: '100%', marginTop: 8, minHeight: 42 }}>
+              {loading ? 'Signing in...' : 'Admin Sign In'}
+            </button>
+          </form>
+
+          <div className="demo-credentials">
+            <strong>Demo Credentials</strong><br />
+            Admin ID: NBXADMIN01<br />
+            Password: admin@123
+          </div>
+
+          <p className="auth-link">
+            Not an admin? <Link to="/user-login">Member login</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
