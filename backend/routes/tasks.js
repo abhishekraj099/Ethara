@@ -131,18 +131,22 @@ router.put('/:id', protect, async (req, res) => {
     );
     const isOwner = access.project.owner.toString() === req.user._id.toString();
     const isProjectAdmin = memberEntry && memberEntry.role === 'admin';
+    const isTaskCreator = task.createdBy.toString() === req.user._id.toString();
+    const isSystemAdmin = req.user.role === 'admin';
 
     const { title, description, assignedTo, priority, dueDate, tags, status } = req.body;
 
-    if (!isOwner && !isProjectAdmin && req.user.role !== 'admin') {
-      task.status = status || task.status;
-    } else {
+    // Only project admin, task creator, or system admin can edit full details
+    if (isProjectAdmin || isOwner || isSystemAdmin || isTaskCreator) {
       task.title = title || task.title;
       task.description = description !== undefined ? description : task.description;
       task.assignedTo = assignedTo !== undefined ? assignedTo : task.assignedTo;
       task.priority = priority || task.priority;
       task.dueDate = dueDate !== undefined ? dueDate : task.dueDate;
       task.tags = tags || task.tags;
+      task.status = status || task.status;
+    } else {
+      // Regular members can only update status
       task.status = status || task.status;
     }
 

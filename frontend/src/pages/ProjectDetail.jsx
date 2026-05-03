@@ -199,29 +199,33 @@ export default function ProjectDetail() {
 
               {!columnTasks.length && <div className="empty-state" style={{ padding: 20 }}>No tasks</div>}
 
-              {columnTasks.map((task) => (
-                <div key={task._id} className="task-card" style={{ borderLeft: `3px solid ${priorityColor[task.priority]}` }}>
-                  <h4>{task.title}</h4>
-                  {task.description && <p className="meta" style={{ marginTop: 6 }}>{task.description}</p>}
-                  <div className="meta" style={{ display: 'grid', gap: 4, margin: '10px 0' }}>
-                    {task.assignedTo && <span>Assigned to {task.assignedTo.name}</span>}
-                    {task.dueDate && <span style={{ color: task.isOverdue ? '#dc2626' : undefined }}>
-                      Due {new Date(task.dueDate).toLocaleDateString()} {task.isOverdue ? ' · OVERDUE' : ''}
-                    </span>}
+              {columnTasks.map((task) => {
+                const canEditTask = isAdmin || task.createdBy?._id === user?._id;
+                return (
+                  <div key={task._id} className="task-card" style={{ borderLeft: `3px solid ${priorityColor[task.priority]}` }}>
+                    <h4>{task.title}</h4>
+                    {task.description && <p className="meta" style={{ marginTop: 6 }}>{task.description}</p>}
+                    <div className="meta" style={{ display: 'grid', gap: 4, margin: '10px 0' }}>
+                      {task.assignedTo && <span>Assigned to {task.assignedTo.name}</span>}
+                      <span style={{ fontSize: 11, opacity: 0.7 }}>Created by {task.createdBy?.name}</span>
+                      {task.dueDate && <span style={{ color: task.isOverdue ? '#dc2626' : undefined }}>
+                        Due {new Date(task.dueDate).toLocaleDateString()} {task.isOverdue ? ' · OVERDUE' : ''}
+                      </span>}
+                    </div>
+                    <div className="row-actions">
+                      <select value={task.status} onChange={(e) => handleStatusChange(task._id, e.target.value)} className="select" style={{ fontSize: 12, padding: '7px 9px', color: statusColor[task.status] }}>
+                        {columns.map((status) => <option key={status} value={status}>{status}</option>)}
+                      </select>
+                      <span className="badge" style={{ color: priorityColor[task.priority], background: `${priorityColor[task.priority]}18` }}>{task.priority}</span>
+                      {canEditTask && (
+                        <button onClick={() => handleDeleteTask(task._id)} className="btn btn-danger icon-btn" title="Delete task">
+                          <Trash2 size={14} />
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <div className="row-actions">
-                    <select value={task.status} onChange={(e) => handleStatusChange(task._id, e.target.value)} className="select" style={{ fontSize: 12, padding: '7px 9px', color: statusColor[task.status] }}>
-                      {columns.map((status) => <option key={status} value={status}>{status}</option>)}
-                    </select>
-                    <span className="badge" style={{ color: priorityColor[task.priority], background: `${priorityColor[task.priority]}18` }}>{task.priority}</span>
-                    {isAdmin && (
-                      <button onClick={() => handleDeleteTask(task._id)} className="btn btn-danger icon-btn" title="Delete task">
-                        <Trash2 size={14} />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           );
         })}

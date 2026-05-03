@@ -130,7 +130,82 @@ npm run dev
 - `frontend/src/api/index.js` - normalized API base URL
 - `frontend/src/context/AuthContext.jsx` - auth login and signup calls
 
-## Notes
+## Role-Based Access Control
 
-- The backend includes a root route and health check route for deployment validation.
-- The frontend uses a shared Axios client that normalizes the API base URL.
+The application implements a two-tier role system: **Admin** and **Member**, with additional role management at the project level.
+
+### System Roles
+
+#### Admin (System Admin)
+- **Created**: The first user to sign up automatically becomes a system admin
+- **Permissions**:
+  - Can create projects
+  - Can manage all projects (edit, delete)
+  - Can view all users
+  - Can edit/delete any task
+  - Can view projects created by any user
+  - Can add/remove members from any project
+  - Can promote members to project admin role
+
+#### Member (Regular User)
+- **Created**: All users after the first automatically become members
+- **Permissions**:
+  - Can create projects (becomes project owner)
+  - Can only update task status on assigned tasks
+  - Can view tasks assigned to them
+  - Can only manage projects they own or are members of
+  - Cannot create other system admins
+  - Cannot delete projects unless they are the owner
+
+### Project-Level Roles
+
+Within each project, members can have two roles:
+
+#### Project Admin
+- Can edit project details
+- Can add/remove project members
+- Can create, edit, and delete tasks
+- Can manage member roles
+- Can delete the project
+
+#### Project Member
+- Can view project and tasks
+- Can only update task status
+- Cannot create tasks
+- Cannot modify project settings
+- Cannot manage other members
+
+### Permission Rules
+
+**Creating a Task**:
+- Only project admins and project owners can create tasks
+
+**Editing a Task**:
+- Project admins can edit all fields
+- Project owner can edit all fields
+- System admins can edit all fields
+- Task creator can edit all fields
+- Regular members can only update task status
+
+**Deleting a Task**:
+- Project admins, project owner, system admin, or task creator
+
+**Managing Projects**:
+- System admins have full access
+- Project owner is automatically a project admin
+
+### Authentication Flow
+
+1. First user signs up → becomes **Admin**
+2. Subsequent users sign up → become **Member**
+3. Admins can add members to projects with specific roles
+4. Project role is independent of system role
+
+### Frontend Role Indicators
+
+The UI automatically hides/shows features based on role:
+- Delete buttons only appear for authorized users
+- "Add Task" button only shows for project admins
+- "Add Member" button only shows for project admins
+- Delete member buttons only show for project admins
+

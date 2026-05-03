@@ -18,13 +18,13 @@ router.post('/signup', [
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'Email already registered' });
 
     const userCount = await User.countDocuments();
-    const assignedRole = userCount === 0 ? 'admin' : (role === 'admin' ? 'admin' : 'member');
+    const assignedRole = userCount === 0 ? 'admin' : 'member';
 
     const user = await User.create({ name, email, password, role: assignedRole });
 
