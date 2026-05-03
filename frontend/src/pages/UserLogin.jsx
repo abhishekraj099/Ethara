@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { PanelsTopLeft } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import './AuthPages.css';
 
 export default function UserLogin() {
   const [form, setForm] = useState({ email: '', password: '' });
