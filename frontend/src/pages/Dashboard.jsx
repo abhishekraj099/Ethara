@@ -148,23 +148,17 @@ export default function Dashboard() {
 
       {/* ── Quick Actions (Member only) ── */}
       {!isAdmin && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginTop: 20 }}>
-          <Link to="/projects" className="glass-card" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}>
-            <div style={{ width: 44, height: 44, background: 'var(--primary-soft)', borderRadius: 12, display: 'grid', placeItems: 'center', color: 'var(--primary)', flexShrink: 0 }}>
-              <FolderKanban size={20} />
+        <div style={{ marginTop: 20 }}>
+          <Link to="/projects" className="glass-card" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 16, cursor: 'pointer', maxWidth: 480 }}>
+            <div style={{ width: 48, height: 48, background: 'var(--primary-soft)', borderRadius: 12, display: 'grid', placeItems: 'center', color: 'var(--primary)', flexShrink: 0 }}>
+              <FolderKanban size={22} />
             </div>
-            <div>
-              <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>Submit a Project</div>
-              <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Create a project request for admin approval</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 15 }}>Create a Project</div>
+              <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 2 }}>Submit a new project for admin approval</div>
             </div>
-          </Link>
-          <Link to="/tasks" className="glass-card" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 14, cursor: 'pointer' }}>
-            <div style={{ width: 44, height: 44, background: 'var(--success-soft)', borderRadius: 12, display: 'grid', placeItems: 'center', color: 'var(--success)', flexShrink: 0 }}>
-              <ListChecks size={20} />
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 14 }}>Update Task Status</div>
-              <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>Move your tasks from pending → done</div>
+            <div style={{ background: 'var(--primary)', color: '#fff', padding: '8px 16px', borderRadius: 8, fontSize: 12, fontWeight: 700, flexShrink: 0 }}>
+              + Create
             </div>
           </Link>
         </div>
