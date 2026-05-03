@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Plus, Trash2, UserPlus } from 'lucide-react';
+import { Plus, Trash2, UserPlus, Check, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { authAPI, projectAPI, taskAPI } from '../api';
 import { useAuth } from '../context/AuthContext';
@@ -17,8 +17,10 @@ export default function ProjectDetail() {
   const [users, setUsers] = useState([]);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [showMemberForm, setShowMemberForm] = useState(false);
+  const [showAssignForm, setShowAssignForm] = useState(false);
   const [taskForm, setTaskForm] = useState({ title: '', description: '', assignedTo: '', priority: 'medium', dueDate: '', status: 'todo' });
   const [memberForm, setMemberForm] = useState({ userId: '', role: 'member' });
+  const [assignForm, setAssignForm] = useState({ userId: '', role: 'member' });
 
   const loadProject = () => projectAPI.getOne(id).then((r) => setProject(r.data));
   const loadTasks = () => taskAPI.getAll({ project: id }).then((r) => setTasks(r.data));
@@ -79,6 +81,39 @@ export default function ProjectDetail() {
     }
   };
 
+  const handleAssignMember = async (e) => {
+    e.preventDefault();
+    try {
+      await projectAPI.assignMember(id, assignForm);
+      toast.success('Member assigned!');
+      setAssignForm({ userId: '', role: 'member' });
+      setShowAssignForm(false);
+      loadProject();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to assign member');
+    }
+  };
+
+  const handleApproveMember = async (userId) => {
+    try {
+      await projectAPI.approveMember(id, userId);
+      toast.success('Member approved!');
+      loadProject();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to approve member');
+    }
+  };
+
+  const handleRejectMember = async (userId) => {
+    try {
+      await projectAPI.rejectMember(id, userId);
+      toast.success('Member request rejected');
+      loadProject();
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to reject member');
+    }
+  };
+
   const handleRemoveMember = async (userId) => {
     if (!confirm('Remove this member from the project?')) return;
     try {
@@ -111,16 +146,21 @@ export default function ProjectDetail() {
         <div className="section-title">
           <h2>Team Members ({project.members?.length || 0})</h2>
           {isAdmin && (
-            <button onClick={() => setShowMemberForm(!showMemberForm)} className="btn btn-secondary">
-              <UserPlus size={16} /> Add Member
-            </button>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button onClick={() => setShowMemberForm(!showMemberForm)} className="btn btn-secondary">
+                <UserPlus size={16} /> Add Member
+              </button>
+              <button onClick={() => setShowAssignForm(!showAssignForm)} className="btn btn-secondary">
+                <Plus size={16} /> Assign User
+              </button>
+            </div>
           )}
         </div>
 
         {showMemberForm && (
           <form onSubmit={handleAddMember} className="form-grid" style={{ marginBottom: 14 }}>
             <select value={memberForm.userId} onChange={(e) => setMemberForm({ ...memberForm, userId: e.target.value })} required className="select">
-              <option value="">Select user</option>
+              <option value="">Select user to add</option>
               {users.filter((u) => !project.members?.find((m) => m.user?._id === u._id)).map((u) => (
                 <option key={u._id} value={u._id}>{u.name} ({u.email})</option>
               ))}
@@ -130,6 +170,22 @@ export default function ProjectDetail() {
               <option value="admin">Admin</option>
             </select>
             <button type="submit" className="btn btn-primary">Add</button>
+          </form>
+        )}
+
+        {showAssignForm && (
+          <form onSubmit={handleAssignMember} className="form-grid" style={{ marginBottom: 14 }}>
+            <select value={assignForm.userId} onChange={(e) => setAssignForm({ ...assignForm, userId: e.target.value })} required className="select">
+              <option value="">Select user to assign</option>
+              {users.filter((u) => !project.members?.find((m) => m.user?._id === u._id)).map((u) => (
+                <option key={u._id} value={u._id}>{u.name} ({u.email})</option>
+              ))}
+            </select>
+            <select value={assignForm.role} onChange={(e) => setAssignForm({ ...assignForm, role: e.target.value })} className="select">
+              <option value="member">Member</option>
+              <option value="admin">Admin</option>
+            </select>
+            <button type="submit" className="btn btn-primary">Assign</button>
           </form>
         )}
 
@@ -154,6 +210,45 @@ export default function ProjectDetail() {
           ))}
         </div>
       </div>
+
+      {isAdmin && project.pendingMembers?.length > 0 && (
+        <div className="glass-card" style={{ marginBottom: 18, borderLeft: '3px solid #FBBF24' }}>
+          <div className="section-title">
+            <h2>Pending Approvals ({project.pendingMembers?.filter(p => p.status === 'pending').length})</h2>
+          </div>
+          <div style={{ display: 'grid', gap: 10 }}>
+            {project.pendingMembers?.filter(p => p.status === 'pending').map((pending) => (
+              <div key={pending.user?._id} className="member-pill" style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', background: 'rgba(251, 191, 36, 0.1)', border: '1px solid rgba(251, 191, 36, 0.3)' }}>
+                <div style={{ flex: 1 }}>
+                  <strong>{pending.user?.name}</strong>
+                  <span className="meta"> · {pending.user?.email}</span>
+                  <div className="meta" style={{ fontSize: 11, marginTop: 4, opacity: 0.7 }}>
+                    Requested {new Date(pending.requestedAt).toLocaleDateString()}
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <button
+                    onClick={() => handleApproveMember(pending.user?._id)}
+                    className="btn icon-btn"
+                    title="Approve"
+                    style={{ background: 'rgba(34, 197, 94, 0.2)', color: '#22C55E', border: 'none', width: 32, height: 32, padding: 0 }}
+                  >
+                    <Check size={16} />
+                  </button>
+                  <button
+                    onClick={() => handleRejectMember(pending.user?._id)}
+                    className="btn btn-danger icon-btn"
+                    title="Reject"
+                    style={{ width: 32, height: 32, padding: 0 }}
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {showTaskForm && (
         <div className="glass-card" style={{ marginBottom: 18 }}>

@@ -28,6 +28,11 @@ export const projectAPI = {
   delete: (id) => API.delete(`/projects/${id}`),
   addMember: (projectId, data) => API.post(`/projects/${projectId}/members`, data),
   removeMember: (projectId, userId) => API.delete(`/projects/${projectId}/members/${userId}`),
+  requestJoin: (projectId) => API.post(`/projects/${projectId}/request-join`),
+  getPendingMembers: (projectId) => API.get(`/projects/${projectId}/pending-members`),
+  approveMember: (projectId, userId) => API.post(`/projects/${projectId}/approve-member/${userId}`),
+  rejectMember: (projectId, userId) => API.post(`/projects/${projectId}/reject-member/${userId}`),
+  assignMember: (projectId, data) => API.post(`/projects/${projectId}/assign-member`, data),
 };
 
 export const taskAPI = {
