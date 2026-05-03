@@ -28,11 +28,16 @@ export default function UserSignup() {
   return (
     <div className="auth-page">
       <div className="auth-card">
+        <div className="auth-tabs">
+          <Link to="/user-login" className="auth-tab">Login</Link>
+          <Link to="/user-signup" className="auth-tab active">Signup</Link>
+        </div>
+
         <div className="auth-brand">
           <div className="brand-mark"><PanelsTopLeft size={22} /></div>
           <div>
-            <h1 className="auth-title">Create Account</h1>
-            <p className="auth-subtitle">Join to view projects and collaborate with teams.</p>
+            <h1 className="auth-title">Join the Team</h1>
+            <p className="auth-subtitle">Collaborate with purpose—stay aligned, track progress, and drive results together</p>
           </div>
         </div>
 
@@ -46,6 +51,7 @@ export default function UserSignup() {
                 onChange={(e) => setForm({ ...form, [field]: e.target.value })}
                 required
                 className="field"
+                placeholder={field === 'name' ? 'Your full name' : field === 'email' ? 'you@example.com' : 'Create a password'}
               />
             </div>
           ))}
@@ -56,7 +62,7 @@ export default function UserSignup() {
         </form>
 
         <p className="auth-link">
-          Have an account? <Link to="/user-login">Sign in</Link>
+          Already have an account? <Link to="/user-login">Sign in</Link>
         </p>
         <p className="auth-link">
           Admin? <Link to="/admin-login">Admin portal</Link>

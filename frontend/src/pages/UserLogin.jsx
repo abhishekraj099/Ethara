@@ -28,6 +28,11 @@ export default function UserLogin() {
   return (
     <div className="auth-page">
       <div className="auth-card">
+        <div className="auth-tabs">
+          <Link to="/user-login" className="auth-tab active">Login</Link>
+          <Link to="/user-signup" className="auth-tab">Signup</Link>
+        </div>
+
         <div className="auth-brand">
           <div className="brand-mark"><PanelsTopLeft size={22} /></div>
           <div>
@@ -56,9 +61,6 @@ export default function UserLogin() {
           </button>
         </form>
 
-        <p className="auth-link">
-          No account? <Link to="/user-signup">Sign up</Link>
-        </p>
         <p className="auth-link">
           Admin? <Link to="/admin-login">Admin portal</Link>
         </p>
