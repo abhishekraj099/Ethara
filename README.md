@@ -6,11 +6,37 @@ Team Task Manager is a full-stack project for managing users, projects, and task
 
 This application provides a complete task and project management workflow:
 
-- User signup and login with JWT authentication
-- Role-aware access for admin and member users
-- Project creation, updates, member management, and details
-- Task creation, status tracking, assignment, and filtering
-- Separate frontend and backend deployment support
+- **Dual Authentication System**: Separate User and Admin login portals
+- **User Features**: View projects, apply to join, collaborate with teams
+- **Admin Features**: Create projects, upload details, manage team requirements
+- **Role-aware access** for admin and member users
+- **Project creation, updates, member management, and details**
+- **Task creation, status tracking, assignment, and filtering**
+- **Separate frontend and backend deployment support**
+
+## Authentication Flow
+
+### Two Login Paths
+
+1. **User Login** - Normal users can:
+   - Create an account via signup
+   - View all projects
+   - Apply to join projects
+   - Collaborate with team members
+   - Manage assigned tasks
+
+2. **Admin Login** - Secure admin-only access with:
+   - Special Admin ID (e.g., NBXADMIN01)
+   - Secret Admin Password
+   - Full project creation and management
+   - Complete access control over all projects
+   - Team management and requirements setup
+
+### Landing Page
+
+When users visit the application, they see a welcome screen with two options:
+- **User Portal** - For regular users to login/signup
+- **Admin Portal** - For admins to login with credentials
 
 ## Implemented Work
 

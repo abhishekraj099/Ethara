@@ -8,7 +8,7 @@ export default function Layout() {
 
   const handleLogout = () => {
     logout();
-    navigate('/login');
+    navigate('/');
   };
 
   return (
@@ -36,7 +36,22 @@ export default function Layout() {
 
         <div className="sidebar-footer">
           <div className="user-name">{user?.name}</div>
-          <div className="user-role">{user?.role}</div>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <div className="user-role">{user?.role}</div>
+            {user?.role === 'admin' && (
+              <span style={{
+                background: 'linear-gradient(135deg, #2dd4bf 0%, #3b82f6 100%)',
+                color: 'white',
+                padding: '2px 8px',
+                borderRadius: '4px',
+                fontSize: '10px',
+                fontWeight: 700,
+                textTransform: 'uppercase'
+              }}>
+                ⭐ System
+              </span>
+            )}
+          </div>
           <button onClick={handleLogout} className="btn btn-danger">
             <LogOut size={16} /> Logout
           </button>

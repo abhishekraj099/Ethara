@@ -42,8 +42,17 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const adminLogin = async (adminId, password) => {
+    const { data } = await API.post('/auth/admin-login', { adminId, password });
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(data));
+    API.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+    setUser(data);
+    return data;
+  };
+
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, adminLogin, loading }}>
       {children}
     </AuthContext.Provider>
   );
